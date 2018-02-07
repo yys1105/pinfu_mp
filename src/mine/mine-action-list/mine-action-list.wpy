@@ -1,0 +1,77 @@
+<template>
+  <view class="group">
+    <repeat for="{{actions}}" key="index" index="index" item="item">
+      <view class="cell">
+        <text class="left-icon iconfont {{item.icon}}"></text>
+        <text class="text">{{item.text}}</text>
+        <text class="right-icon iconfont icon-right-arrow"></text>
+      </view>
+    </repeat>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class MineActionList extends wepy.component {
+    components = {};
+
+    data = {
+      actions:[
+        {
+          icon:'icon-manage-fill',
+          text:'我的收藏',
+          path:''
+        },{
+          icon:'icon-manage-fill',
+          text:'收货地址',
+          path:''
+        },{
+          icon:'icon-manage-fill',
+          text:'余额流水',
+          path:''
+        },{
+          icon:'icon-manage-fill',
+          text:'我的评论',
+          path:''
+        },{
+          icon:'icon-manage-fill',
+          text:'官方客服',
+          path:''
+        }
+      ]
+    };
+
+    methods = {};
+
+    events = {};
+  }
+</script>
+
+<style scoped lang="stylus">
+  .group
+    margin-top 20rpx
+    position relative
+    background-color #fff
+  .cell
+    display flex
+    position relative
+    align-items center
+    padding 20rpx 30rpx
+    &::before
+      content ''
+      position absolute
+      left 30rpx
+      top 0
+      right 0
+      height 1rpx
+      border-top 1rpx solid #c7c7c7
+      color #c7c7c7
+    &:first-child::before
+      display none
+    .left-icon
+      margin-right 20rpx
+    .text
+      font-size 30rpx
+      flex 1
+</style>

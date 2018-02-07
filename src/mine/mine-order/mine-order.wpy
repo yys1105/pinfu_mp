@@ -1,0 +1,78 @@
+<template>
+  <view class="mine-order">
+    <view class="mine-order-header">
+      <text class="title">我的订单</text>
+      <text class="more">查看全部</text>
+    </view>
+    <view class="order-actions">
+      <repeat for="{{actions}}" key="index" index="index" item="item">
+        <view class="action-item" @tap="tapItem">
+          <view class="iconfont {{item.icon}}"></view>
+          <text class="text">{{item.text}}</text>
+        </view>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class MineOrder extends wepy.component {
+    components = {};
+
+    props = {
+      actions:Array
+    }
+
+    data = {
+    };
+    methods = {
+      tapItem(){
+
+      }
+    };
+
+    events = {};
+  }
+</script>
+
+<style scoped lang="stylus">
+  .mine-order
+    padding 0 15rpx
+    background-color #fff
+    .mine-order-header
+      height 90rpx
+      display flex
+      justify-content space-between
+      align-items center
+      box-sizing border-box
+      padding 7rpx 0
+      font-size 28rpx
+      .title::before
+        font-family 'iconfont'
+        content '\e649    '
+      .more::after
+        font-family 'iconfont'
+        content '\e60f'
+    .order-actions
+      display flex
+      padding 15rpx 0
+      text-align center
+      position relative
+      &::before
+        content ''
+        position absolute
+        top 0
+        z-index 1
+        width 100%
+        height 1rpx
+        transform-origin 0 0
+        background-color #ccc
+      .action-item
+        flex 1
+        .iconfont
+          font-size 50rpx
+        .text
+          font-size 28rpx
+</style>

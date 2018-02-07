@@ -1,0 +1,112 @@
+<template>
+  <view class="group">
+    <view class="cell">
+      <text class="label">手机号码</text>
+      <input class="input" type="number" confirm-type="next" placeholder="请输入手机号码" data-key="phone" @input="bindInput"/>
+    </view>
+    <view class="cell">
+      <text class="label">密码</text>
+      <input class="input" type="text" password confirm-type="next" placeholder="请输入密码" data-key="password" @input="bindInput"/>
+    </view>
+    <view class="cell">
+      <text class="label">短信验证码</text>
+      <input class="input" type="text" confirm-type="done" placeholder="请输入验证码" data-key="code" @input="bindInput"/>
+      <view class="get-code {{phone.length==11?'':'disabled'}}">发送验证码</view>
+    </view>
+  </view>
+  <view class="tip">
+    <view class="right" @tap="toLogin">
+      想起密码了？去登录 <text class="iconfont icon-right"></text>
+    </view>
+  </view>
+  <view class="button-wrap">
+    <button class="button {{phone.length==11?'':'disableStyle'}}" disabled="{{!phone}}" @tap="register">重置</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+
+  export default class Forget extends wepy.page {
+    config = {
+      navigationBarTitleText: '重置密码'
+    }
+    components = {};
+
+    data = {
+      phone:'',
+      password:'',
+      code:''
+    };
+    methods = {
+      bindInput(e){
+        for(var i in this){
+          this[i] = i==e.target.dataset.key?e.detail.value:this[i]
+        }
+      },
+      register(){
+
+      },
+      toLogin(){
+        wx.redirectTo({
+          url:'./login'
+        })
+      }
+    };
+
+    events = {};
+
+    onLoad(option) {
+    };
+  }
+</script>
+
+<style lang="stylus">
+  .group
+    margin-top 20rpx
+    position relative
+    background-color #fff
+  .cell
+    display flex
+    position relative
+    align-items center
+    padding 20rpx 30rpx
+    &::before
+      content ''
+      position absolute
+      left 30rpx
+      top 0
+      right 0
+      height 1rpx
+      border-top 1rpx solid #c7c7c7
+      color #c7c7c7
+    &:first-child::before
+      display none
+  .label
+    width 180rpx
+  .input
+    flex 1
+  .get-code
+    padding 15rpx 50rpx
+    border-left 1rpx solid #ccc
+    color #eb1e00
+    font-size 24rpx
+    &.disabled
+      color #ff9f91
+  .tip
+    display flex
+    padding 15rpx 36rpx
+    justify-content flex-end
+    align-items center
+    color #999
+  .button-wrap
+    padding 36rpx 75rpx
+    .button
+      background-color #eb1e00!important
+      height 69rpx
+      line-height 69rpx
+      color #fff!important
+      font-size 32rpx
+      &.disableStyle
+        background-color #ff8775!important
+</style>

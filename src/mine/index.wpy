@@ -1,0 +1,146 @@
+<style lang="stylus">
+  .mine-header
+    background-color #eb1e00
+    display flex
+    align-items center
+    padding 96rpx 32rpx
+    .mine-acatar
+      display inline-block
+      box-sizing border-box
+      background-color #fff
+      width 116rpx
+      height 116rpx
+      border-radius 50%
+      border 6rpx solid rgba(255, 255, 255, .3)
+      position relative
+      overflow hidden
+      image
+        width 104rpx
+        height 104rpx
+    .mine-info
+      margin-left 36rpx
+      .login-btn
+        color #fff
+        background-color rgba(255, 255, 255, .4)
+        font-size 26rpx
+        padding 15rpx 22rpx
+        border-radius 31rpx
+      .name
+        color #fff
+        width 422rpx
+        .iconfont
+          margin-left 30rpx
+      .info-bottom
+        color #fff
+        width 422rpx
+        margin-top 16rpx
+  .logout-container
+    margin-top 32rpx
+    button
+      background-color #fff!important
+      background #fff
+      border 1px solid #eb1e00
+      color #eb1e00
+      width 640rpx
+      height 80rpx
+      line-height 80rpx
+      font-size 32rpx
+</style>
+
+<template>
+  <view class="mine-header">
+    <view class="mine-acatar">
+      <image mode="aspectFill" src="{{userInfo.head_url?userInfo.head_url:'../assets/images/default_avatar.jpg'}}"></image>
+    </view>
+    <view class="mine-info">
+      <block wx:if="{{!userInfo.access_token}}">
+        <view class="login-btn" @tap="toLogin">点击登录</view>
+      </block>
+      <block wx:else>
+        <view class="name">{{userInfo.name}}<text class="iconfont icon-daipinjia"></text></view>
+        <view class="info-bottom">个性签名：{{userInfo.personal_signature?userInfo.personal_signature:'这个人很懒...'}}</view>
+      </block>
+    </view>
+  </view>
+  <mineOrder :actions="actions"></mineOrder>
+  <mineActionList></mineActionList>
+  <view class="logout-container" wx:if="{{userInfo.access_token}}">
+    <button @tap="logout">退出登录</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import mineOrder from './mine-order/mine-order';
+  import mineActionList from './mine-action-list/mine-action-list';
+  import { getUserInfo } from '../config/function';
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '个人中心'
+    }
+    components = {
+      mineOrder,
+      mineActionList
+    }
+    data = {
+      actions: [
+        {
+          icon: 'icon-daifukuan',
+          text: '待付款',
+          href: ''
+        },
+        {
+          icon: 'icon-daipindan',
+          text: '待拼单',
+          href: ''
+        },
+        {
+          icon: 'icon-daifahuo',
+          text: '待发货',
+          href: ''
+        },
+        {
+          icon: 'icon-daishouhuo',
+          text: '待收货',
+          href: ''
+        },
+        {
+          icon: 'icon-daipinjia',
+          text: '待评价',
+          href: ''
+        }
+      ],
+      userInfo:{}
+    }
+
+    computed = {}
+
+    methods = {
+      toLogin(){
+        wx.navigateTo({
+          url: '../login-register/login'
+        })
+      },
+      logout(){
+        wx.clearStorage()
+        this.userInfo = {}
+        this.methods.toLogin()
+        // toLogin()
+      }
+    }
+
+    events = {
+    }
+
+    onShow() {
+      getUserInfo().then((data)=>{
+        this.userInfo = data.data
+        this.$apply()
+        console.log(this.userInfo)
+      },(err)=>{
+        console.log(err)
+      })
+    }
+  }
+</script>

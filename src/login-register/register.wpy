@@ -1,0 +1,151 @@
+<template>
+  <view class="group">
+    <view class="cell">
+      <text class="label">手机号码</text>
+      <input class="input" type="number" confirm-type="next" placeholder="请输入手机号码" data-key="phone" @input="bindInput"/>
+    </view>
+    <view class="cell">
+      <text class="label">密码</text>
+      <input class="input" type="text" password confirm-type="next" placeholder="请输入密码" data-key="password" @input="bindInput"/>
+    </view>
+    <view class="cell">
+      <text class="label">短信验证码</text>
+      <input class="input" type="text" confirm-type="done" placeholder="请输入验证码" data-key="code" @input="bindInput"/>
+      <view class="get-code {{phone.length==11?'':'disabled'}}" disabled="{{phone.length!==11}}" @tap="getCode">发送验证码</view>
+    </view>
+  </view>
+  <view class="tip">
+    <view class="right" @tap="toLogin">
+      已有账号？去登录 <text class="iconfont icon-right"></text>
+    </view>
+  </view>
+  <view class="button-wrap">
+    <button class="button {{phone.length==11?'':'disableStyle'}}" disabled="{{phone.length!==11}}" @tap="register">注册</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import * as http from '../config/http';
+  import { verify } from '../config/function'
+
+  export default class Register extends wepy.page {
+    config = {
+      navigationBarTitleText: '注册'
+    }
+    components = {};
+
+    data = {
+      phone:'',
+      password:'',
+      code:''
+    };
+    methods = {
+      bindInput(e){
+        for(var i in this){
+          this[i] = i==e.target.dataset.key?e.detail.value:this[i]
+        }
+      },
+      register(){
+        verify([
+          { value:this.phone, type:'phone', err:'请输入正确的手机号码格式', required:'请输入手机号码' },
+          { value:this.password, required:'请输入密码' },
+          { value:this.code, required:'请输入验证码' }
+        ]).then((data)=>{
+          http.httpPost('app/register',{
+            cellphone:this.phone,
+            sms_code:this.code,
+            password:this.password
+          }).then((data)=>{
+            wx.setStorage({
+              key:"user-info",
+              data:data.data
+            })
+            wx.reLaunch({
+              url: '../mine/index'
+            })
+          },err=>{
+            console.log(err)
+          })
+        },(err)=>{
+          wx.showToast({
+            icon:'none',
+            title: err.msg
+          })
+        })
+      },
+      toLogin(){
+        wx.redirectTo({
+          url:'./login'
+        })
+      },
+      getCode(){
+        verify([
+          {value:this.phone,type:'phone',err:'请输入正确的手机号码格式', required:'请输入手机号码'}
+        ]).then((data)=>{
+          http.httpPost('/app/register-sms',{
+            cellphone:this.phone
+          })
+        },(err)=>{
+          this.phone = ''
+        })
+
+      },
+    };
+
+    events = {};
+
+    onLoad(option) {
+    };
+  }
+</script>
+
+<style lang="stylus">
+  .group
+    margin-top 20rpx
+    position relative
+    background-color #fff
+  .cell
+    display flex
+    position relative
+    align-items center
+    padding 20rpx 30rpx
+    &::before
+      content ''
+      position absolute
+      left 30rpx
+      top 0
+      right 0
+      height 1rpx
+      border-top 1rpx solid #c7c7c7
+      color #c7c7c7
+    &:first-child::before
+      display none
+  .label
+    width 180rpx
+  .input
+    flex 1
+  .get-code
+    padding 15rpx 50rpx
+    border-left 1rpx solid #ccc
+    color #eb1e00
+    font-size 24rpx
+    &.disabled
+      color #ff9f91
+  .tip
+    display flex
+    padding 15rpx 36rpx
+    justify-content flex-end
+    align-items center
+    color #999
+  .button-wrap
+    padding 36rpx 75rpx
+    .button
+      background-color #eb1e00!important
+      height 69rpx
+      line-height 69rpx
+      color #fff!important
+      font-size 32rpx
+      &.disableStyle
+        background-color #ff8775!important
+</style>

@@ -1,0 +1,51 @@
+<template>
+  <view class="swiper-wrapper">
+    <swiper autoplay="{{true}}" circular="{{true}}" style="height: 750rpx">
+      <repeat  for="{{imgUrls}}">
+        <swiper-item>
+          <image src="{{item}}" mode="aspectFill" lazy-load="{{true}}" class="slide-image" @tap="imgPreview"/>
+        </swiper-item>
+      </repeat>
+    </swiper>
+    <view class></view>
+  </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+
+    export default class Details extends wepy.page {
+      config = {
+        navigationBarTitleText: '商品详情'
+      }
+      components = {};
+      data = {
+        imgUrls: [
+          'http://cdn-p.ytclg.com/1/IV0dqxLN9aJhG2KVFYeJ7oAzU6YE5rCO.jpg',
+          'http://cdn-p.ytclg.com/1/hhTtQ04yumkz9nl3xcYyATUECNofjPpB.jpg'
+        ],
+      };
+      methods = {
+        imgPreview(){
+          wx.previewImage({
+            urls: [
+              'http://cdn-p.ytclg.com/1/IV0dqxLN9aJhG2KVFYeJ7oAzU6YE5rCO.jpg',
+              'http://cdn-p.ytclg.com/1/hhTtQ04yumkz9nl3xcYyATUECNofjPpB.jpg'
+            ]
+          })
+        }
+      };
+      events = {};
+
+      onLoad(option) {
+      };
+    }
+</script>
+
+<style lang="stylus">
+  .swiper-wrapper
+    position relative
+  .slide-image
+    width 100%
+    height 750rpx
+</style>

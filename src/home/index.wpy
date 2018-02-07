@@ -1,0 +1,110 @@
+<template>
+  <swiper indicator-dots="true" circular="true" indicator-active-color="#fff">
+    <repeat  for="{{imgUrls}}">
+      <swiper-item>
+        <image src="{{item}}" lazy-load="{{true}}" class="slide-image"/>
+      </swiper-item>
+    </repeat>
+  </swiper>
+  <repeat for="{{recommendedList}}" key="index" index="index" item="item">
+    <goodsMaximum content="item"></goodsMaximum>
+  </repeat>
+  <view wx:if="!hasData" class="upwarp-nodata">——见底了——</view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import  * as http from '../config/http'
+  import goodsMaximum from './_goodsMaximum'
+
+  export default class Home extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页',
+      enablePullDownRefresh:true
+    }
+    components = {
+      goodsMaximum
+    };
+
+    data = {
+      hidden:true,
+      imgUrls: [
+        'http://cdn-p.ytclg.com/1/IV0dqxLN9aJhG2KVFYeJ7oAzU6YE5rCO.jpg',
+        'http://cdn-p.ytclg.com/1/hhTtQ04yumkz9nl3xcYyATUECNofjPpB.jpg'
+      ],
+      recommendedList:[],
+      page:1,
+      perPage:5,
+      hasData:true
+    };
+    customFunction = {
+
+    }
+    methods = {
+
+    };
+
+    events = {};
+
+    getRecommend(){
+      this.hasData = true
+      this.page = 1
+      http.httpGet('goods/list-recommend',{
+        fields:'id,name,banner_pic,pin_price,sale_price',
+        expand:'current_pin_count',
+        page:this.page,
+        per_page:this.perPage
+      }).then((data)=>{
+        this.recommendedList=data.data.data
+        this.$apply();
+        wx.stopPullDownRefresh()
+        console.log(this.recommendedList)
+      },(err)=>{
+      })
+    }
+
+    onPullDownRefresh(){
+      this.getRecommend()
+    }
+
+    onReachBottom(){
+      if(this.hasData){
+        wx.showLoading({
+          title: '玩命加载中'
+        })
+        this.page += 1
+        http.httpGet('goods/list-recommend',{
+          fields:'id,name,banner_pic,pin_price,sale_price',
+          expand:'current_pin_count',
+          page:this.page,
+          per_page:this.perPage
+        }).then((data)=>{
+          this.hasData = data.data.data.length>=this.perPage?true:false
+          data.data.data.forEach((item)=>{
+            this.recommendedList.push(item)
+          })
+          this.$apply();
+          wx.hideLoading();
+          console.log(this.recommendedList)
+        },(err)=>{})
+      }
+
+    }
+
+    onLoad(option) {
+      this.getRecommend()
+    }
+  }
+</script>
+
+<style lang="stylus">
+  swiper
+    height 400rpx
+  .slide-image
+    width 100%
+  .upwarp-nodata
+    padding 30rpx 0
+    text-align center
+    color grey
+    font-size 24rpx
+</style>

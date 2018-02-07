@@ -1,0 +1,68 @@
+<style lang="stylus">
+  @import "./assets/styles/common.styl"
+  page
+    background-color #efefef
+    font-size 28rpx
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'home/index',
+      'mine/index',
+      'login-register/login',
+      'login-register/register',
+      'login-register/forget',
+      'details/index'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: '拼福商城-lite',
+      navigationBarTextStyle: 'black'
+    },
+    tabBar: {
+      color: '#333',
+      selectedColor:'#eb1e00',
+      backgroundColor:'#fff',
+      list:[{
+        pagePath:'home/index',
+        text: '首页',
+        iconPath: 'assets/images/homepage.png',
+        selectedIconPath: 'assets/images/homepage_fill.png'
+      },{
+        pagePath: 'mine/index',
+        text: '分类',
+        iconPath: 'assets/images/manage.png',
+        selectedIconPath: 'assets/images/manage_fill.png'
+      },{
+        pagePath: 'mine/index',
+        text: '订单',
+        iconPath: 'assets/images/activity.png',
+        selectedIconPath: 'assets/images/activity_fill.png'
+      },{
+        pagePath: 'mine/index',
+        text: '个人中心',
+        iconPath: 'assets/images/mine.png',
+        selectedIconPath: 'assets/images/mine_fill.png'
+      }]
+    }
+  }
+
+  globalData = {
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+  }
+}
+</script>

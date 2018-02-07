@@ -1,0 +1,127 @@
+<template>
+  <view class="group">
+    <view class="cell">
+      <text class="label">手机号码</text>
+      <input class="input" type="number" confirm-type="next" placeholder="请输入手机号码" data-key="phone" @input="bindInput"/>
+    </view>
+    <view class="cell">
+      <text class="label">密码</text>
+      <input class="input" type="text" password confirm-type="done" placeholder="请输入密码" data-key="password" @input="bindInput"/>
+    </view>
+  </view>
+  <view class="tip">
+    <view class="left" @tap="toForget">
+      忘记密码了？
+    </view>
+    <view class="right" @tap="toRegister">
+      去注册 <text class="iconfont icon-right"></text>
+    </view>
+  </view>
+  <view class="button-wrap">
+    <button class="button {{phone.length===11?'':'disableStyle'}}" disabled="{{phone.length!==11}}" @tap="login">登录</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import * as http from "../config/http";
+  import { verify } from '../config/function'
+
+  export default class Login extends wepy.page {
+    config = {
+      navigationBarTitleText: '登录'
+    }
+    components = {};
+
+    data = {
+      phone:'',
+      password:''
+    };
+    methods = {
+      toRegister(){
+        wx.redirectTo({
+          url:'./register'
+        })
+      },
+      toForget(){
+        wx.redirectTo({
+          url:'./forget'
+        })
+      },
+      login(){
+        verify([
+          { value:this.phone, type:'phone', err:'请输入正确的手机号码格式', required:'请输入手机号码' },
+          { value:this.password, required:'请输入密码' },
+        ]).then((res)=>{
+          http.httpPost('app/login',{
+            cellphone:this.phone,
+            password:this.password
+          }).then((data)=>{
+            wx.setStorage({
+              key:"user-info",
+              data:data.data
+            })
+            wx.reLaunch({
+              url: '../mine/index'
+            })
+          })
+        },err=>{
+          console.log(err)
+        })
+      },
+      bindInput(e){
+        for(var i in this){
+          this[i] = i==e.target.dataset.key?e.detail.value:this[i]
+        }
+      }
+    };
+
+    events = {};
+
+    onLoad(option) {
+    };
+  }
+</script>
+
+<style lang="stylus">
+  .group
+    margin-top 20rpx
+    position relative
+    background-color #fff
+  .cell
+    display flex
+    position relative
+    align-items center
+    padding 20rpx 30rpx
+    &::before
+      content ''
+      position absolute
+      left 30rpx
+      top 0
+      right 0
+      height 1rpx
+      border-top 1rpx solid #c7c7c7
+      color #c7c7c7
+    &:first-child::before
+      display none
+  .label
+    width 180rpx
+  .input
+    flex 1
+  .tip
+    display flex
+    padding 15rpx 36rpx
+    justify-content space-between
+    align-items center
+    color #999
+  .button-wrap
+    padding 36rpx 75rpx
+    .button
+      background-color #eb1e00!important
+      height 69rpx
+      line-height 69rpx
+      color #fff!important
+      font-size 32rpx
+      &.disableStyle
+        background-color #ff8775!important
+</style>

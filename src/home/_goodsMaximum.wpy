@@ -1,0 +1,92 @@
+<template>
+    <view class="goods-item">
+      <view class="item-img" @tap="toDetails">
+        <image mode="aspectFit" lazy-load="{{true}}" src="{{content.banner_pic}}"></image>
+      </view>
+      <view class="item-title">
+        <view class="title-content">{{content.name}}</view>
+      </view>
+      <view class="item-action">
+        <view class="left">
+          <view class="price">￥{{content.pin_price}}</view>
+          <view class="del">￥{{content.sale_price}}</view>
+        </view>
+        <view class="right">
+          <view class="current-pin-count">当前有<text class="highlight">{{content.current_pin_count}}</text>在拼单</view>
+          <button @tap="toDetails">去拼单</button>
+        </view>
+      </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+
+    export default class GoodsMaximum extends wepy.component {
+        components = {}
+        props = {
+          content:{
+            type: Object
+          }
+        }
+        data = {};
+        methods = {
+          toDetails(){
+            wx.navigateTo({
+              url: '../details/index'
+            })
+          }
+        };
+        events = {};
+    }
+</script>
+
+<style scoped lang="stylus">
+  .goods-item
+    background-color #fff
+    margin-top 18rpx
+    .item-img
+      height 400rpx
+      position relative
+      image
+        width 100%
+        height 400rpx
+    .item-title
+      padding 30rpx 15rpx
+      .title-content
+        font-weight bold
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    .item-action
+      display flex
+      justify-content space-between
+      align-items center
+      padding 7rpx
+      .left
+        display flex
+        align-items center
+        .price
+          font-weight bold
+          padding 0 7rpx
+          color #eb1e00
+          font-size 36rpx
+        .del
+          text-decoration:line-through
+      .right
+        display flex
+        align-items center
+        .current-pin-count
+          .highlight
+            color #eb1e00
+        button
+          margin 0 22rpx
+          height 48rpx
+          padding 0 22rpx
+          line-height 48rpx
+          font-size 28rpx
+          color #fff
+          background-color #eb1e00
+          border 1px solid #eb1e00
+</style>
