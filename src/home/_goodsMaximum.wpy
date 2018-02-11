@@ -1,18 +1,18 @@
 <template>
     <view class="goods-item">
       <view class="item-img" @tap="toDetails">
-        <image mode="aspectFit" lazy-load="{{true}}" src="{{content.banner_pic}}"></image>
+        <image mode="aspectFit" lazy-load="{{true}}" src="{{goodsContent.banner_pic}}"></image>
       </view>
       <view class="item-title">
-        <view class="title-content">{{content.name}}</view>
+        <view class="title-content">{{goodsContent.name}}</view>
       </view>
       <view class="item-action">
         <view class="left">
-          <view class="price">￥{{content.pin_price}}</view>
-          <view class="del">￥{{content.sale_price}}</view>
+          <view class="price">￥{{goodsContent.pin_price}}</view>
+          <view class="del">￥{{goodsContent.sale_price}}</view>
         </view>
         <view class="right">
-          <view class="current-pin-count">当前有<text class="highlight">{{content.current_pin_count}}</text>在拼单</view>
+          <view class="current-pin-count">当前有<text class="highlight">{{goodsContent.current_pin_count}}</text>在拼单</view>
           <button @tap="toDetails">去拼单</button>
         </view>
       </view>
@@ -23,21 +23,21 @@
     import wepy from 'wepy';
 
     export default class GoodsMaximum extends wepy.component {
-        components = {}
-        props = {
-          content:{
-            type: Object
-          }
+      components = {}
+      props = {
+        goodsContent:{
+          type: Object
         }
-        data = {};
-        methods = {
-          toDetails(){
-            wx.navigateTo({
-              url: '../details/index'
-            })
-          }
-        };
-        events = {};
+      }
+      data = {};
+      methods = {
+        toDetails(){
+          wx.navigateTo({
+            url: '../details/index?id='+this.goodsContent.id
+          })
+        }
+      };
+      events = {};
     }
 </script>
 

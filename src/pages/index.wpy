@@ -25,8 +25,11 @@
 
     onLoad(option) {
       var goPage = setInterval(() => {
-        wx.switchTab({
-          url: '../home/index'
+        // wx.switchTab({
+        //   url: '../home/index'
+        // })
+        wx.navigateTo({
+          url: '../details/index?id=9'
         })
         clearInterval(goPage)
       }, 10)

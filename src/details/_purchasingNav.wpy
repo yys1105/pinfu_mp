@@ -1,0 +1,108 @@
+<template>
+  <view class="purchasing-nav">
+    <view class="button action_button" @tap="toHome">
+      <view class="iconfont icon-homepage"></view>
+      <view>首页</view>
+    </view>
+    <view class="button action_button" @tap="collected">
+      <view class="iconfont {{isColleted===0?'icon-dislike':'icon-like'}}"></view>
+      <view>收藏</view>
+    </view>
+    <view class="button buy-action">
+      <view>￥{{details.buy_price}}</view>
+      <view>单独购买</view>
+    </view>
+    <view class="button pin-action">
+      <view>￥{{details.pin_price}}</view>
+      <view>发起拼单</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  import * as http from "../config/http";
+
+  export default class PurchasingNav extends wepy.component {
+    components = {}
+    props = {
+      details:{
+        type:Object,
+        twoWay: true
+      }
+    }
+    data = {
+      isColleted:0
+    };
+    methods = {
+      toHome(){
+        wx.switchTab({
+          url: '../home/index'
+        })
+      },
+      collected(){
+        http.httpPost('goods-collection/create-or-delete',{
+          goods_id:this.details.id
+        }).then((data)=>{
+          console.log(data)
+          this.isColleted = data.data
+          this.$apply()
+        })
+      }
+    };
+    events = {
+      'isCollected':(id)=>{
+        console.log(id)
+        http.httpGet('goods-collection/is-collected',{
+          goods_id:id
+        }).then((data)=>{
+
+          this.isColleted = data.data
+          this.$apply()
+        })
+      }
+    };
+
+    onLoad () {
+    }
+  }
+</script>
+
+<style scoped lang="stylus">
+  .purchasing-nav
+    position fixed
+    left 0
+    bottom 0
+    z-index 99
+    width 100%
+    height 96rpx
+    display flex
+    align-items stretch
+    .button
+      box-sizing border-box
+      background-color #fff
+      border-top 1px solid #ddd
+      text-align center
+      display flex
+      flex-wrap wrap
+      align-content center
+      view
+        width 100%
+    .action_button
+      border 0
+      width 96rpx
+      &+.action_button
+        border-left 1px solid #ddd
+    .buy-action
+      border-left 1px solid #ff8775
+      background-color #ff8775
+      width 224rpx
+      color #fff
+    .pin-action
+      background-color #ff3f23
+      border-left 1px solid #ff3f23
+      flex 1
+      color #fff
+  .icon-like
+    color #ff3f23
+</style>

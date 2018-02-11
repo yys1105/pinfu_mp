@@ -1,8 +1,12 @@
 import wepy from 'wepy';
 const BASE_URL = 'http://192.168.0.250/pinfu/frontend/web/api/'
+const TOKEN = 'access-token'
 
 export function httpGet(url,params) {
-  const promise = new Promise(function (resolve, reject) {
+  let userInfo = wx.getStorageSync('user-info')
+  let token = userInfo.access_token
+  !params[TOKEN] && token && Object.assign(params,{[TOKEN]:token})
+  return new Promise(function (resolve, reject) {
     wepy.request({
       url: BASE_URL+url,
       data:params,
@@ -26,14 +30,16 @@ export function httpGet(url,params) {
       }
     })
   })
-  return promise
 }
 
 export function httpPost(url,params) {
-  const promise = new Promise(function (resolve, reject) {
+  let userInfo = wx.getStorageSync('user-info')
+  let token = userInfo.access_token
+  !params[TOKEN] && token && Object.assign(params,{[TOKEN]:token})
+  return new Promise(function (resolve, reject) {
     wepy.request({
       url: BASE_URL+url,
-      data:params,
+      data: params,
       header: {
         'content-type': 'application/x-www-form-urlencoded'
       },
@@ -62,5 +68,4 @@ export function httpPost(url,params) {
       }
     })
   })
-  return promise
 }

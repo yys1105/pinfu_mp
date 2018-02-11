@@ -7,7 +7,7 @@
     </repeat>
   </swiper>
   <repeat for="{{recommendedList}}" key="index" index="index" item="item">
-    <goodsMaximum content="item"></goodsMaximum>
+    <goodsMaximum :goodsContent="item"></goodsMaximum>
   </repeat>
   <view wx:if="!hasData" class="upwarp-nodata">——见底了——</view>
 </template>
