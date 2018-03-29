@@ -1,7 +1,7 @@
 <template>
   <view class="group">
     <repeat for="{{actions}}" key="index" index="index" item="item">
-      <view class="cell">
+      <view class="cell" @tap="toPage({{item.path}})">
         <text class="left-icon iconfont {{item.icon}}"></text>
         <text class="text">{{item.text}}</text>
         <text class="right-icon iconfont icon-right-arrow"></text>
@@ -25,7 +25,7 @@
         },{
           icon:'icon-manage-fill',
           text:'收货地址',
-          path:''
+          path:'./address/index'
         },{
           icon:'icon-manage-fill',
           text:'余额流水',
@@ -42,7 +42,13 @@
       ]
     };
 
-    methods = {};
+    methods = {
+      toPage(path){
+        wx.navigateTo({
+          url:path
+        })
+      }
+    };
 
     events = {};
   }

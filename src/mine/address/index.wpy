@@ -1,0 +1,57 @@
+<template>
+  <emptyData wx:if="{{list.length==0}}"></emptyData>
+  <block wx:if="{{list.length!=0}}">2</block>
+  <view class="button-wrap">
+    <button class="button" @tap="toAdd">新增地址</button>
+  </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+    import  * as http from '../../config/http';
+    import emptyData from '../../components/empty-data'
+
+    export default class Address extends wepy.page {
+      config = {
+        navigationBarTitleText: '我的地址'
+      }
+      components = {
+        emptyData
+      };
+      data = {
+        list:[]
+      };
+      methods = {
+        toAdd(){
+          wx.navigateTo({
+            url:'./add'
+          })
+        }
+      };
+      events = {};
+      getAddressList(){
+        // console.log(this)
+        http.httpGet('user-address/list',{
+          expand:'address'
+        }).then((data)=>{
+          console.log(data)
+        })
+      };
+      onLoad(option) {
+        this.getAddressList();
+      };
+    }
+</script>
+
+<style lang="stylus">
+  .button-wrap
+    padding 36rpx 75rpx
+    .button
+      background-color #eb1e00!important
+      height 69rpx
+      line-height 69rpx
+      color #fff!important
+      font-size 32rpx
+      &.disableStyle
+        background-color #ff8775!important
+</style>

@@ -1,0 +1,33 @@
+<template>
+    <view class="empty">
+      <image mode="aspectFill" class="empty-img" src="../assets/images/empty.svg"></image>
+      <view class="text">{{text}}</view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy';
+
+    export default class EmptyData extends wepy.component {
+      props = {
+        text:{
+          type:String,
+          default:'没有内容~'
+        }
+      }
+      components = {};
+      data = {};
+      methods = {};
+      events = {};
+    }
+</script>
+
+<style scoped lang="stylus">
+  .empty
+    text-align center
+    .text
+      color #666
+  .empty-img
+    width 340rpx
+    height 340rpx
+</style>

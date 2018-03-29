@@ -28,9 +28,15 @@
         // wx.switchTab({
         //   url: '../home/index'
         // })
+        // wx.switchTab({
+        //   url: '../mine/index'
+        // })
         wx.navigateTo({
-          url: '../details/index?id=9'
+          url: '../mine/address/add'
         })
+        // wx.navigateTo({
+        //   url: '../details/index?id=9'
+        // })
         clearInterval(goPage)
       }, 10)
     }
